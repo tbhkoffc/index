@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blitz Not Dev</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #4895ef;
+      --secondary: #3f37c9;
+      --dark: #1a1a2e;
+      --light: #f8f9fa;
+      --success: #4cc9f0;
+      --danger: #f72585;
+      --warning: #f8961e;
+    }
+    
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: url('https://qu.ax/pGuTt.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--light);
+      text-align: center;
+      line-height: 1.6;
+      position: relative;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: -1;
+    }
+
+    /* Modal Styles */
+    #welcomeModal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-content {
+      background-color: var(--dark);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      max-width: 90%;
+      width: 320px;
+      box-shadow: 0 0 25px var(--primary-light);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .modal-content h1 {
+      margin: 0 0 0.5rem;
+      font-size: 2rem;
+      color: var(--light);
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .modal-content p {
+      margin: 0 0 1.5rem;
+      font-size: 0.9rem;
+      color: #ddd;
+      letter-spacing: 0.5px;
+    }
+
+    .modal-content button {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .modal-content button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(67, 97, 238, 0.6);
+    }
+    
+    .hero {
+      min-height: 15vh;
+      display: flex;
+      align-items: center;
+      padding-top: 8px;
+      position: relative;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .hero h1 span {
+      color: var(--primary);
+      text-shadow: 0 0 15px rgba(67, 97, 238, 0.6);
+    }
+    .hero p span {
+      color: var(--primary);
+      text-shadow: 0 0 15px rgba(67, 97, 238, 0.6);
+    }
+    .span {
+      color: var(--primary);
+      text-shadow: 0 0 15px rgba(67, 97, 238, 0.6);
+    }
+
+    /* Navigation */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: rgba(26, 26, 46, 0.8);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .menu-icon {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 101;
+    }
+
+    .garis {
+      height: 3px;
+      background: white;
+      border-radius: 3px;
+      transition: all 0.3s ease;
+    }
+
+    .garis.atas { width: 30px; }
+    .garis.tengah { width: 20px; }
+    .garis.bawah { width: 10px; }
+    
+    /* Side Menu */
+    .side-menu {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 200px;
+      height: 350%;
+      background: rgba(26, 26, 46, 0.95);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      border-radius: 18px;
+      padding: 80px 20px 20px;
+      gap: 15px;
+      transition: left 0.3s ease;
+      z-index: 99;
+      backdrop-filter: blur(10px);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .side-menu a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      padding: 10px 15px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .side-menu a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(5px);
+    }
+
+    .side-menu.open {
+      left: 0;
+    }
+
+    /* Profile Image */
+    .foto-profil {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-top: 30px;
+      border: 5px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+    
+    .foto-profil:hover {
+      transform: scale(1.05);
+    }
+
+    /* Social Media */
+    .sosmed {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .sosmed a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 24px;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .sosmed a:hover {
+      transform: translateY(-5px);
+      background: var(--primary);
+      box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+    }
+
+    /* Content Sections */
+    .page-section {
+      background: rgba(26, 26, 46, 0.8);
+      color: var(--light);
+      padding: 25px;
+      border-radius: 16px;
+      margin: 20px auto;
+      max-width: 800px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+    }
+
+    .page-section h2 {
+      font-size: 28px;
+      margin-bottom: 15px;
+      color: white;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-section p {
+      font-size: 18px;
+      opacity: 0.9;
+    }
+
+    /* Benefits List */
+    .benefits ul {
+      list-style: none;
+      padding: 0;
+      font-size: 16px;
+      text-align: left;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .benefits li {
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      padding: 8px 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+    }
+
+    .benefits li::before {
+      content: '✓';
+      color: var(--success);
+      margin-right: 12px;
+      font-weight: bold;
+    }
+
+    .benefits li.excluded::before {
+      content: '✗';
+      color: var(--danger);
+    }
+
+    /* Duration Text */
+    .duration {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 20px;
+    }
+
+    /* Buttons */
+    .buy-button {
+      display: inline-block;
+      padding: 12px 30px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+      border: none;
+      cursor: pointer;
+      margin: 10px 0;
+    }
+    
+    .buy-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+    }
+    
+    .buy-button:active {
+      transform: translateY(1px);
+    }
+
+    /* Music Button */
+    .music-button {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+
+    .music-button:hover {
+      background: var(--primary);
+      transform: scale(1.1);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 20px;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 14px;
+      margin-top: 50px;
+      background: rgba(26, 26, 46, 0.8);
+      backdrop-filter: blur(10px);
+    }
+    
+    /* Price Highlight */
+    .price {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 15px 0;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    /* Divider */
+    .divider {
+      height: 3px;
+      width: 100px;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      margin: 20px auto;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Welcome Modal -->
+  <div id="welcomeModal">
+    <div class="modal-content">
+      <h1>Blitz Not Dev</h1>
+      <p>Welcome to my website 🔥</p>
+      <button id="btnCloseModal">OK</button>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="navbar">
+    <div class="menu-icon" onclick="toggleMenu()">
+      <span class="garis atas"></span>
+      <span class="garis tengah"></span>
+      <span class="garis bawah"></span>
+    </div>
+    <div class="side-menu" id="menu">
+      <a href="#Blitz">Blitz Not Dev</a>
+    </div>
+    <h1>Blitz Not Dev</h1>
+    <button class="music-button" onclick="toggleMusik()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="white">
+        <path d="M9 3v12.55A4 4 0 1 0 11 19V7h6V3H9z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Profile Image -->
+  <div id="Home"></div>
+  <img class="foto-profil" src="https://qu.ax/qWZfc.jpg" alt="Foto Profil">
+
+  <!-- Social Media -->
+  <div id="Blitz" class="sosmed">
+    <a href="" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://tiktok.com/@blitzhahahahaha" target="_blank"><i class="fab fa-tiktok"></i></a>
+    <a href="https://wa.me/6285174293745" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    <a href="https://t.me/BlitzzNotDev" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+  </div>
+
+  <!-- Hero Section -->
+  <div class="page-section">
+  <div class="hero">
+    <h1>Hallo Everyone I'm <span>Blitz Not Dev</span></h1></div>
+ <div class="hero"><p>
+    ‍👤<span>Blitz Not Dev</span> adalah penyedia layanan digital seperti panel dan lain-lain nya.
+Kami hadir dengan harga terjangkau, pelayanan cepat, dan support yang responsif.
+</div>
+📲  pilih produk dan Klik Buy untuk order atau membeli Produk kami!
+    </p>
+    </div><div class="hero">
+   <p></p></div>
+   </div>
+
+
+  <!-- Panel Sections -->
+  <p></p>
+  <p></p>
+  <p></p>
+  <h2>LIST PANEL PTERODACTYL</h2>
+  <div class="divider"></div>
+
+  <!-- Panel Items (1GB to UNLI) -->
+  <div id="panel" class="page-section">
+    <h2>PANEL RAM 1GB</h2>
+    <div class="benefits">
+      <ul>
+        <li>CPU 40%</li>
+        <li>PANEL PRIVAT</li>
+        <li class="excluded">GARANSI 7 HARI</li>
+        <li class="excluded">REKOMEDASI</li>
+        <li class="excluded">FREE SC</li>
+      </ul>
+    </div>
+    <div class="price">Rp 1,000</div>
+    <div class="duration">Per 30 Hari</div>
+    <a href="https://wa.me/6285174293745?text=Bg+Blitz+Mau+Buyy+Panel+1gb" target="_blank" class="buy-button">
+      BUY PANEL PTERODACTYL
+    </a>
+  </div>
+ <div class="page-section">
+    <h2>PANEL RAM 2GB</h2>
+    <div class="benefits">
+      <ul>
+        <li>CPU 60%</li>
+        <li>PANEL PRIVAT</li>
+        <li class="excluded">GARANSI 7 HARI</li>
+        <li class="excluded">REKOMEDASI</li>
+        <li class="excluded">FREE SC</li>
+      </ul>
+    </div>
+    <div class="price">Rp 2,000</div>
+    <div class="duration">Per 30 Hari</div>
+    <a href="https://wa.me/6285174293745?text=Bg+Blitz+mau+Buyy+Panel+2gb" target="_blank" class="buy-button">
+      BUY PANEL PTERODACTYL
+    </a>
+  </div>
+  <div class="page-section">
+    <h2>PANEL RAM 3GB</h2>
+    <div class="benefits">
+      <ul>
+        <li>CPU 80%</li>
+        <li>PANEL PRIVAT</li>
+        <li class="excluded">GARANSI 7 HARI</li>
+        <li class="excluded">REKOMEDASI</li>
+        <li class="excluded">FREE SC</li>
+      </ul>
+    </div>
+    <div class="price">Rp 3,000</div>
+    <div class="duration">Per 30 Hari</div>
+    <a href="https://wa.me/6285174293745?text=Bg+Blitz+mau+Buyy+Panel+3gb" target="_blank" class="buy-button">
+      BUY PANEL PTERODACTYL
+    </a>
+  </div>
+    <div class="page-section">
+    <h2>PANEL RAM 4GB</h2>
+    <div class="benefits">
+      <ul>
+        <li>CPU 100%</li>
+        <li>PANEL PRIVAT</li>
+        <li>GARANSI 7 HARI</li>
+        <li class="excluded">REKOMEDASI</li>
+        <li class="excluded">FREE SC</li>
+      </ul>
+    </div>
+    <div class="price">Rp 4,000</div>
+    <div class="duration">Per 30 Hari</div>
+    <a href="https://wa.me/6285174293745?text=Bg+Blitz+mau+Buyy+Panel+4gb" target="_blank" class="buy-button">
+      BUY PANEL PTERODACTYL
+    </a>
+  </div>
+    <div class="page-section">
+    <h2>PANEL RAM 5GB</h2>
+    <div class="benefits">
+      <ul>
+        <li>CPU 120%</li>
+        <li>PANEL PRIVAT</li>
+        <li>GARANSI 7 HARI</li>
+        <li>REKOMEDASI</li>
+        <li class="excluded">FREE SC</li>
+      </ul>
+    </div>
+    <div class="price">Rp 5,000</div>
+    <div class="duration">Per 30 Hari</div>
+    <a href="https://wa.me/6285174293745?text=Bg+Blitz+mau+Buyy+Panel+5gb" target="_blank" class="buy-button">
+      BUY PANEL PTERODACTYL
+    </a>
+  </div>
+    <div class="page-section">
+    <h2>PANEL RAM 6GB</h2>
+    <div class="benefits">
+      <ul>
+        <li>CPU 140%</li>
+        <li>PANEL PRIVAT</li>
+        <li>GARANSI 7 HARI</li>
+        <li>REKOMEDASI</li>
+        <li class="excluded">FREE SC</li>
+      </ul>
+    </div>
+    <div class="price">Rp 6,000</div>
+    <div class="duration">Per 30 Hari</div>
+    <a href="https://wa.me/6285174293745?text=Bg+Blitz+mau+Buyy+Panel+6gb" target="_blank" class="buy-button">
+      BUY PANEL PTERODACTYL
+    </a>
+  </div>
+    <div class="page-section">
+    <h2>PANEL RAM 7GB</h2>
+    <div class="benefits">
+      <ul>
+        <li>CPU 160%</li>
+        <li>PANEL PRIVAT</li>
+        <li>GARANSI 7 HARI</li>
+        <li>REKOMEDASI</li>
+        <li class="excluded">FREE SC</li>
+      </ul>
+    </div>
+    <div class="price">Rp 7,000</div>
+    <div class="duration">Per 30 Hari</div>
+    <a href="https://wa.me/6285174293745?text=Bg+Blitz+mau+Buyy+Panel+7gb" target="_blank" class="buy-button">
+      BUY PANEL PTERODACTYL
+    </a>
+  </div>
+    <div class="page-section">
+    <h2>PANEL RAM 9GB</h2>
+    <div class="benefits">
+      <ul>
+        <li>CPU 180%</li>
+        <li>PANEL PRIVAT</li>
+        <li>GARANSI 7 HARI</li>
+        <li>REKOMEDASI</li>
+        <li class="excluded">FREE SC</li>
+      </ul>
+    </div>
+    <div class="price">Rp 9,000</div>
+    <div class="duration">Per 30 Hari</div>
+    <a href="https://wa.me/6285174293745?text=Bg+Blitz+mau+Buyy+Panel+8gb" target="_blank" class="buy-button">
+      BUY PANEL PTERODACTYL
+    </a>
+  </div>
+    <div class="page-section">
+    <h2>PANEL RAM 10GB</h2>
+    <div class="benefits">
+      <ul>
+        <li>CPU 220%</li>
+        <li>PANEL PRIVAT</li>
+        <li>GARANSI 7 HARI</li>
+        <li>REKOMEDASI</li>
+        <li class="excluded">FREE SC PUSH</li>
+      </ul>
+    </div>
+    <div class="price">Rp 10,000</div>
+    <div class="duration">Per 30 Hari</div>
+    <a href="https://wa.me/6285174293745?text=Bg+Blitz+mau+Buyy+Panel+10gb" target="_blank" class="buy-button">
+      BUY PANEL PTERODACTYL
+    </a>
+  </div>
+     <div class="page-section">
+    <h2>PANEL RAM UNLI</h2>
+    <div class="benefits">
+      <ul>
+        <li>CPU UNLI</li>
+        <li>PANEL PRIVAT</li>
+        <li>GARANSI 7 HARI</li>
+        <li>REKOMEDASI</li>
+        <li class="excluded">FREE SC PUSH/BUG</li>
+      </ul>
+    </div>
+    <div class="price">Rp 11,000</div>
+    <div class="duration">Per 30 Hari</div>
+    <a href="https://wa.me/6285174293745?text=Bg+Blitz+mau+Buyy+Panel+Unli" target="_blank" class="buy-button">
+      BUY PANEL PTERODACTYL
+    </a>
+  </div>
+  <!-- Other Panel Items (2GB to UNLI) -->
+  <!-- ... (similar structure for other panels) ... -->
+
+  <!-- Admin Panel Section -->
+  <div id="Admin-Panel"></div>
+  <h2>RESSELER PANEL</h2>
+  <div class="divider"></div>
+  
+  <div class="page-section">
+    <h2>RESSELER PANEL</h2>
+    <div class="benefits">
+      <ul><li>DI AJARIN KALO GK NGERTI</li>
+        <li>BISA JUALAN PANEL</li>
+        <li>CREATE SEPUASNYA 1-10GB</li>
+        <li>BALMOD PASTI</li>
+<li class="excluded">JUAL ADMIN PANEL</li>
+        <li class="excluded">OPEN RESSELER</li>
+        <li class="excluded">OPEN PT</li>
+        <li class="excluded">OPEN OWNER</li>
+      </ul>
+    </div>
+    <div class="price">Rp 6,000</div>
+    <div class="duration">Permanen</div>
+    <a href="https://wa.me/6285174293745?text=Bg+Blitz+mau+Buyy+ResellerPanel" target="_blank" class="buy-button">
+      BUY NOW
+    </a>
+  </div>
+
+  <!-- Reseller Panel Section -->
+  <div id="Reseller"></div>
+  <h2>ADMIN PANEL</h2>
+  <div class="divider"></div>
+  
+  <div class="page-section">
+    <h2>ADMIN PANEL</h2>
+    <div class="benefits">
+      <ul>
+        <li>DI AJARIN KALO GK NGERTI</li>
+        <li>BISA JUALAN PANEL</li>
+        <li>CREATE SEPUASNYA 1-10GB</li>
+        <li>BALMOD PASTI</li>
+<li class="excluded">JUAL ADMIN PANEL</li>
+        <li>OPEN RESSELER</li>
+        <li class="excluded">OPEN PT</li>
+        <li class="excluded">OPEN OWNER</li>
+      </ul>
+    </div>
+    <div class="price">Rp 4,000</div>
+    <div class="duration">Permanen</div>
+    <a href="https://wa.me/6285174293745?text=Bg+Blitz+mau+Buyy+AdminPanel" target="_blank" class="buy-button">
+      BUY NOW
+    </a>
+  </div  <!-- Reseller Panel Section -->
+  <div id="Reseller"></div>
+  <h2>PT PANEL</h2>
+  <div class="divider"></div>
+  
+  <div class="page-section">
+    <h2>PT PANEL</h2>
+    <div class="benefits">
+      <ul><li>DI AJARIN KALO GK NGERTI</li>
+        <li>BISA JUALAN PANEL</li>
+        <li>CREATE SEPUASNYA 1-10GB</li>
+        <li>BALMOD PASTI</li>
+<li>JUAL ADMIN PANEL</li>
+        <li>OPEN RESSELER</li>
+        <li class="excluded">OPEN PT</li>
+        <li class="excluded">OPEN OWNER</li>
+        
+      </ul>
+    </div>
+    <div class="price">Rp 8.000</div>
+    <div class="duration">Permanen</div>
+    <a href="https://wa.me/6285174293745?text=Bg+Blitz+mau+Buyy+PtPanel" target="_blank" class="buy-button">
+      BUY NOW
+    </a>
+  </div>
+  
+  <!-- Reseller Panel Section -->
+  <div id="Reseller"></div>
+  <h2>OWNER PANEL</h2>
+  <div class="divider"></div>
+  
+  <div class="page-section">
+    <h2>OWNER PANEL</h2>
+    <div class="benefits">
+      <ul>
+        <li>DI AJARIN KALO GK NGERTI</li>
+        <li>BISA JUALAN PANEL</li>
+        <li>CREATE SEPUASNYA 1-10GB</li>
+        <li>BALMOD PASTI</li>
+<li>JUAL ADMIN PANEL</li>
+        <li>OPEN RESSELER</li>
+        <li>OPEN PT</li>
+        <li class="excluded">OPEN OWNER</li>
+      </ul>
+    </div>
+    <div class="price">Rp 10.000</div>
+    <div class="duration">Permanen</div>
+    <a href="https://wa.me/6285174293745?text=Bg+Blitz+mau+Buyy+OwnerPanel" target="_blank" class="buy-button">
+      BUY NOW
+    </a>
+  </div>
+
+  <!-- Bot Section -->
+  <h2>SEWA BOT PUSH KONTAK</h2>
+  <div class="divider"></div>
+
+  <div id="sewa_bot" class="page-section">
+    <h2>SEWA BOT PUSH</h2>
+    <div class="benefits">
+      <ul>
+        <li>PUSH KONTAK JADI MUDAH</li>
+        <li>BOT ON 24JAM</li>
+      </ul>
+    </div>
+    <div class="price">Rp 2,000</div>
+    <div class="duration">1 Hari</div>
+    <a href="https://wa.me/6285174293745?text=Bg+Blitz+mau+Sewa+Bot+Push" target="_blank" class="buy-button">
+      BUY NOW
+    </a>
+  </div>
+
+<h2>SEWA BOT JAGA GRUP</h2>
+  <div class="divider"></div>
+
+  <div id="sewa_bot" class="page-section">
+    <h2>SEWA BOT JAGA GRUP</h2>
+    <div class="benefits">
+      <ul>
+        <li>MENU AI</li>
+        <li>MENU MAIN</li>
+<li>MENU DOWNLOAD</li>
+<li>MENU DATABASE</li>
+<li>MENU RPG</li>
+<li>MENU RPG GUILD</li>
+<li>MENU STICKER</li>
+<li>MENU ADVANCED</li>
+<li>MENU XP</li>
+<li>MENU FUN</li>
+<li>MENU GAME</li>
+<li>MENU GITUHUB</li>
+<li>MENU GROUP</li>
+<li>MENU IMAGE</li>
+<li>MENU NSFW</li>
+<li>MENU INFO</li>
+<li>MENU INTERNET</li>
+<li>MENU ISLAM</li>
+<li>MENU KERANG</li>
+<li>MENU MAKER</li>
+<li>MENU NEWS</li>
+<li>MENU VOICE</li>
+<li>MENU QUOTES</li>
+<li>MENU STALK</li>
+<li>MENU SHORTLINK</li>
+<li>MENU TOOLS</li>
+<li>MENU ANONYMOUS</li>
+        <li>BOT ON 24JAM</li>
+      </ul>
+    </div>
+    <div class="price">Rp 8.000</div>
+    <div class="duration">30 Hari</div>
+    <a href="https://wa.me/6285174293745?text=Bg+Blitz+mau+Sewa+Bot+Jaga+Grup" target="_blank" class="buy-button">
+      BUY NOW
+    </a>
+  </div>
+  <!-- Music -->
+  <audio id="musik" autoplay muted>
+    <source src="https://files.catbox.moe/dlc98a.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Footer -->
+  <footer class="footer">
+    © 2025 Powered by Blitz Not Dev 
+  </footer>
+
+  <!-- Script -->
+  <script>
+    // Toggle side menu
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.classList.toggle("open");
+      
+      // Animate hamburger icon
+      const garisAtas = document.querySelector('.garis.atas');
+      const garisTengah = document.querySelector('.garis.tengah');
+      const garisBawah = document.querySelector('.garis.bawah');
+      
+      if (menu.classList.contains('open')) {
+        garisAtas.style.transform = 'rotate(45deg) translate(5px, 5px)';
+        garisTengah.style.opacity = '0';
+        garisBawah.style.transform = 'rotate(-45deg) translate(5px, -5px)';
+        garisBawah.style.width = '30px';
+      } else {
+        garisAtas.style.transform = 'none';
+        garisTengah.style.opacity = '1';
+        garisBawah.style.transform = 'none';
+        garisBawah.style.width = '10px';
+      }
+    }
+
+    // Music control
+    let musik = document.getElementById("musik");
+    let playing = false;
+
+    function toggleMusik() {
+      if (playing) {
+        musik.pause();
+      } else {
+        musik.play();
+      }
+      playing = !playing;
+    }
+    
+    // Auto-close menu when link is clicked
+    document.querySelectorAll('.side-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById("menu").classList.remove("open");
+      });
+    });
+
+    // Welcome modal
+    window.addEventListener('load', function() {
+      const modal = document.getElementById('welcomeModal');
+      const btnClose = document.getElementById('btnCloseModal');
+
+      btnClose.addEventListener('click', function() {
+        modal.style.display = 'none';
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          modal.style.display = 'none';
+        }
+      });
+      
+      // Auto-play music on first interaction
+      document.body.addEventListener('click', function() {
+        musik.muted = false;
+        musik.play();
+      }, { once: true });
+    });
+  </script>
+</body>
+</html>
