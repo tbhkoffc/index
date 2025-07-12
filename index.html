@@ -130,71 +130,71 @@
     </div>
 
         <audio id="background-music" loop>
-        <source src="https://files.catbox.moe/yyrorx.mp3" type="audio/mpeg">
+        <source src="https://files.catbox.moe/yyrorx.mp3" type="audio/mp3">
     </audio>
 
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const cardContainer = document.querySelector(".card-container");
-        const card = document.querySelector(".card");
-        const buttons = document.querySelectorAll(".card-buttons button");
-        const sections = document.querySelectorAll(".card-section");
-        const backgroundMusic = document.getElementById('background-music'); // <- ID diperbaiki
-        let musicStarted = false;
-        const isMobile = window.matchMedia("(max-width: 480px)").matches;
+        document.addEventListener('DOMContentLoaded', () => {
+            const cardContainer = document.querySelector(".card-container");
+            const card = document.querySelector(".card");
+            const buttons = document.querySelectorAll(".card-buttons button");
+            const sections = document.querySelectorAll(".card-section");
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            let musicStarted = false;
+            const isMobile = window.matchMedia("(max-width: 480px)").matches;
 
-        buttons.forEach(btn => {
-            btn.addEventListener("click", e => {
-                const targetSectionId = e.target.getAttribute("data-section");
-                const targetSection = document.querySelector(targetSectionId);
-                if (!musicStarted && backgroundMusic) {
-                    backgroundMusic.volume = 0.3;
-                    backgroundMusic.play().catch(err => console.error("Audio play failed:", err));
-                    musicStarted = true;
-                }
-                card.classList.toggle("is-active", targetSectionId !== "#about");
-                card.setAttribute("data-state", targetSectionId);
-                sections.forEach(s => s.classList.remove("is-active"));
-                buttons.forEach(b => b.classList.remove("is-active"));
-                e.target.classList.add("is-active");
-                targetSection.classList.add("is-active");
+            buttons.forEach(btn => {
+                btn.addEventListener("click", e => {
+                    const targetSectionId = e.target.getAttribute("data-section");
+                    const targetSection = document.querySelector(targetSectionId);
+                    if (!musicStarted && backgroundMusic) {
+                        backgroundMusic.volume = 0.3;
+                        backgroundMusic.play().catch(err => console.error("Audio play failed:", err));
+                        musicStarted = true;
+                    }
+                    card.classList.toggle("is-active", targetSectionId !== "#about");
+                    card.setAttribute("data-state", targetSectionId);
+                    sections.forEach(s => s.classList.remove("is-active"));
+                    buttons.forEach(b => b.classList.remove("is-active"));
+                    e.target.classList.add("is-active");
+                    targetSection.classList.add("is-active");
+                });
             });
-        });
 
-        if (!isMobile) {
-            cardContainer.addEventListener("mousemove", (e) => {
-                const rect = cardContainer.getBoundingClientRect();
-                const x = e.clientX - rect.left; const y = e.clientY - rect.top;
-                const { width, height } = rect;
-                const rotateX = (y / height - 0.5) * -14;
-                const rotateY = (x / width - 0.5) * 14;
-                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            });
-            cardContainer.addEventListener("mouseleave", () => { card.style.transform = 'rotateX(0deg) rotateY(0deg)'; });
-        }
-
-        // Typing Effect
-        const jobTitleElement = document.getElementById("job-title-animated");
-        const cursorElement = document.getElementById("typing-cursor");
-        const jobTitles = ["Pelajar", "JavaScript Developer", "Bot Creator"];
-        let titleIndex = 0; let charIndex = 0; let isDeleting = false;
-        function type() {
-            const currentTitle = jobTitles[titleIndex];
-            let displayText = isDeleting ? currentTitle.substring(0, charIndex - 1) : currentTitle.substring(0, charIndex + 1);
-            jobTitleElement.textContent = displayText;
-            jobTitleElement.appendChild(cursorElement);
-            charIndex = isDeleting ? charIndex - 1 : charIndex + 1;
-            if (!isDeleting && charIndex === currentTitle.length) {
-                setTimeout(() => isDeleting = true, 2000);
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                titleIndex = (titleIndex + 1) % jobTitles.length;
+            if (!isMobile) {
+                cardContainer.addEventListener("mousemove", (e) => {
+                    const rect = cardContainer.getBoundingClientRect();
+                    const x = e.clientX - rect.left; const y = e.clientY - rect.top;
+                    const { width, height } = rect;
+                    const rotateX = (y / height - 0.5) * -14;
+                    const rotateY = (x / width - 0.5) * 14;
+                    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                });
+                cardContainer.addEventListener("mouseleave", () => { card.style.transform = 'rotateX(0deg) rotateY(0deg)'; });
             }
-            const typingSpeed = isDeleting ? 75 : 150;
-            setTimeout(type, typingSpeed);
-        }
-        type();
-    });
-</script>
+            
+            // Typing Effect
+            const jobTitleElement = document.getElementById("job-title-animated");
+            const cursorElement = document.getElementById("typing-cursor");
+            const jobTitles = ["Pelajar", "JavaScript Developer", "Bot Creator"];
+            let titleIndex = 0; let charIndex = 0; let isDeleting = false;
+            function type() {
+                const currentTitle = jobTitles[titleIndex];
+                let displayText = isDeleting ? currentTitle.substring(0, charIndex - 1) : currentTitle.substring(0, charIndex + 1);
+                jobTitleElement.textContent = displayText;
+                jobTitleElement.appendChild(cursorElement);
+                charIndex = isDeleting ? charIndex - 1 : charIndex + 1;
+                if (!isDeleting && charIndex === currentTitle.length) {
+                    setTimeout(() => isDeleting = true, 2000);
+                } else if (isDeleting && charIndex === 0) {
+                    isDeleting = false;
+                    titleIndex = (titleIndex + 1) % jobTitles.length;
+                }
+                const typingSpeed = isDeleting ? 75 : 150;
+                setTimeout(type, typingSpeed);
+            }
+            type();
+        });
+    </script>
 </body>
 </html>

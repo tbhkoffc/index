@@ -1,14 +1,13 @@
-/* @property --glow-opacity {
+@property --glow-opacity {
   syntax: "<number>";
   inherits: false;
   initial-value: 0;
 }
-
 @property --glow-blur {
   syntax: "<length>";
   inherits: false;
   initial-value: 0px;
-} */
+}
 
 :root {
   --bg-color: #0d0c1d;
@@ -23,13 +22,11 @@
   --font-main: "Jost", sans-serif;
   --font-secondary: "Poppins", sans-serif;
 }
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
 body {
   font-family: var(--font-main);
   background-color: var(--bg-color);
@@ -38,7 +35,6 @@ body {
   place-items: center;
   padding: 20px;
   color: var(--text-color);
-  overflow: hidden;
   background-image: linear-gradient(
       rgba(255, 255, 255, 0.05) 1px,
       transparent 1px
@@ -106,7 +102,6 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   transform-style: preserve-3d;
   transition: height 0.5s cubic-bezier(0.23, 1, 0.32, 1), transform 0.4s ease;
@@ -506,8 +501,8 @@ body {
   display: flex;
   background: rgba(0, 0, 0, 0.2);
   margin-top: auto;
-  position: relative;
-  bottom: unset;
+  position: sticky;
+  bottom: 0;
   left: 0;
   backdrop-filter: blur(10px);
   border-top: 1px solid rgba(255, 255, 255, 0.05);
