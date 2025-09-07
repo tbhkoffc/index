@@ -35,8 +35,9 @@
 
             if (!nameInput) {
                 swalDefault.fire({
-                    title: 'GAK BOLEH KOSONG!',
                     icon: 'error',
+                    title: 'GAK BOLEH KOSONG!',
+                    text: 'Harap Isi Setidaknya 1 Kata!',
                     confirmButtonText: 'OK'
                 });
                 return;
@@ -371,9 +372,9 @@
                 loadingSpinner.style.display = 'none';
 
                 swalDefault.fire({
-                    title: `Khodam: ${randomKhodam.name}`,
-                    html: `<p>${randomKhodam.meaning}</p>`,
                     icon: 'success',
+                    title: randomKhodam.name,
+                    text: randomKhodam.meaning,
                     confirmButtonText: 'OK'
                 });
             }, 2000);
@@ -382,3 +383,4 @@
 </body>
 
 </html>
+
