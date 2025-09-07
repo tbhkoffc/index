@@ -28,9 +28,12 @@
 
             const swalDefault = Swal.mixin({
               background: '#1e1e2f',
-              color: '#ffffff',
               confirmButtonColor: '#4caf50',
-              cancelButtonColor: '#ff4444'
+              cancelButtonColor: '#ff4444',
+              customClass: {
+                title: 'swal2-title',
+                htmlContainer: 'swal2-html-container'
+              }
             });
 
             if (!nameInput) {
@@ -383,4 +386,5 @@
 </body>
 
 </html>
+
 
